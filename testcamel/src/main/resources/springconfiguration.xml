@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jms="http://www.springframework.org/schema/jms"
+           xmlns:camel="http://camel.apache.org/schema/spring" xmlns:context=""
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            https://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/jms
+            https://www.springframework.org/schema/jms/spring-jms.xsd
+            http://camel.apache.org/schema/spring
+            http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <bean id="routeref" class= "camel.routes.FiletoJMSRoute"/>
+    <bean id="downloadLogger" class= "camel.processor.DownloadLogger"/>
+    <context:component-scan base-package="org.apache.camel.spring.issues.contextscan"/>
+    <camel:camelContext>
+        <camel:packageScan>
+            <camel:package>camel.routes</camel:package>
+        </camel:packageScan>
+    </camel:camelContext>
+
+     <bean id="jms" class="org.apache.camel.component.jms.JmsComponent">
+        <property name="connectionFactory">
+            <bean class="org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory">
+                <property name="brokerURL" value="tcp://localhost:51616"/>
+            </bean>
+        </property>
+    </bean>
+
+</beans>
